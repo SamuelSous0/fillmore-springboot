@@ -51,4 +51,47 @@ public class UserService {
                 .map(UserResponseDTO::fromEntity)
                 .toList();
     }
+
+    @Transactional
+    public UserResponseDTO updateUser(Long id, UserRequestDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        // Se o email mudou, valida se ja esta em uso
+        if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
+            throw new BusinessException("Email already registered: " + dto.getEmail());
+        }
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPhone(dto.getPhone());
+        user.setType(dto.getType());
+        
+        // Atualiza a senha apenas se for enviada
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        User updatedUser = userRepository.save(user);
+        return UserResponseDTO.fromEntity(updatedUser);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        userRepository.delete(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDTO login(com.example.fillmore.dto.request.LoginRequestDTO dto) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new BusinessException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new BusinessException("Invalid email or password");
+        }
+
+        return UserResponseDTO.fromEntity(user);
+    }
 }
