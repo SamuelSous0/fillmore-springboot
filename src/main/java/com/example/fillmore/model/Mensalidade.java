@@ -8,6 +8,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -27,9 +29,9 @@ public class Mensalidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: Refatorar para @ManyToOne(targetEntity = Aluno.class) quando a entidade Aluno for criada.
-    @Column(name = "aluno_id", nullable = false)
-    private Long alunoId;
+    @ManyToOne
+    @JoinColumn(name = "aluno_id", nullable = false)
+    private Aluno aluno;
 
     @Column(nullable = false)
     private Integer mesReferencia; // 1-12

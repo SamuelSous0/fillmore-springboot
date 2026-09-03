@@ -2,6 +2,7 @@ package com.example.fillmore.service;
 
 import com.example.fillmore.dto.request.MensalidadeRequestDTO;
 import com.example.fillmore.dto.response.MensalidadeResponseDTO;
+import com.example.fillmore.model.Aluno;
 import com.example.fillmore.model.Mensalidade;
 import com.example.fillmore.repository.MensalidadeRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,11 @@ public class MensalidadeService {
     private final MensalidadeRepository mensalidadeRepository;
 
     public MensalidadeResponseDTO create(MensalidadeRequestDTO dto) {
+        Aluno aluno = new Aluno();
+        aluno.setId(dto.getAlunoId());
+
         Mensalidade mensalidade = Mensalidade.builder()
-                .alunoId(dto.getAlunoId())
+                .aluno(aluno)
                 .mesReferencia(dto.getMesReferencia())
                 .anoReferencia(dto.getAnoReferencia())
                 .valor(dto.getValor())
@@ -52,7 +56,10 @@ public class MensalidadeService {
         Mensalidade mensalidade = mensalidadeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mensalidade não encontrada"));
 
-        mensalidade.setAlunoId(dto.getAlunoId());
+        Aluno aluno = new Aluno();
+        aluno.setId(dto.getAlunoId());
+
+        mensalidade.setAluno(aluno);
         mensalidade.setMesReferencia(dto.getMesReferencia());
         mensalidade.setAnoReferencia(dto.getAnoReferencia());
         mensalidade.setValor(dto.getValor());
@@ -70,7 +77,7 @@ public class MensalidadeService {
     private MensalidadeResponseDTO toResponseDTO(Mensalidade mensalidade) {
         MensalidadeResponseDTO dto = new MensalidadeResponseDTO();
         dto.setId(mensalidade.getId());
-        dto.setAlunoId(mensalidade.getAlunoId());
+        dto.setAlunoId(mensalidade.getAluno() != null ? mensalidade.getAluno().getId() : null);
         dto.setMesReferencia(mensalidade.getMesReferencia());
         dto.setAnoReferencia(mensalidade.getAnoReferencia());
         dto.setValor(mensalidade.getValor());
