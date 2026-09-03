@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 // import jakarta.persistence.JoinColumn;
 // import jakarta.persistence.ManyToOne;
 // import jakarta.persistence.OneToMany;
@@ -37,13 +39,13 @@ public class Route {
 
     private String description;
 
-    // TODO: descomentar quando Driver for adicionado ao projeto
-    // @ManyToOne
-    // @JoinColumn(name = "driver_id", nullable = false)
-    // private Driver driver;
+    @ManyToOne
+    @JoinColumn(name = "driver_id", nullable = false)
+    private Driver driver;
 
     // TODO: descomentar quando Student for adicionado ao projeto
-    // @OneToMany(mappedBy = "route", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // @OneToMany(mappedBy = "route", cascade = {CascadeType.PERSIST,
+    // CascadeType.MERGE})
     // @Builder.Default
     // @ToString.Exclude
     // @JsonIgnore
