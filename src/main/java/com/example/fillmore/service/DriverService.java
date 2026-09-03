@@ -8,6 +8,10 @@ import com.example.fillmore.model.User;
 import com.example.fillmore.repository.DriverRepository;
 import com.example.fillmore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,4 +49,15 @@ public class DriverService {
         return responseDTO;
     }
 
+    public DriverResponseDTO getDriverById(Long id) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Motorista não encontrado com o ID: " + id));
+        return convertToResponse(driver);
+    }
+
+    public List<DriverResponseDTO> getAllDrivers() {
+        return driverRepository.findAll().stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
 }
