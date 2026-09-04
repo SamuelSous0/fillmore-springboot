@@ -1,37 +1,46 @@
 package com.example.fillmore.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "tb_guardians")
+@Table(name = "tb_students")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Guardian {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
-    private User user;
+    private String name;
 
-    @OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL)
-    private List<Student> students;
+    private String address;
+
+    private Double latitude;
+
+    private Double longitude;
+
+    private String school;
+
+    @ManyToOne
+    @JoinColumn(name = "guardian_id", referencedColumnName = "id", nullable = false)
+    private Guardian guardian;
+
+    @ManyToOne
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
+    private Route route;
+
+    private Integer routeOrder;
 }

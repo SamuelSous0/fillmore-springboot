@@ -1,0 +1,4 @@
+DB_URL=jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:6543/postgres
+DB_USERNAME=postgres.ojyfdwbaklaksvwfiebw
+DB_PASSWORD=UNICAP2026@
+
